@@ -118,7 +118,12 @@ fi
 
 # personal
 
+# <Esc> in terminal to use vim keys
 set -o vi
+
+# Export editors
+export EDITOR="nvim"
+export VISUAL="nvim"
 
 # pnpm
 export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
