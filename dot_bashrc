@@ -140,7 +140,8 @@ alias .4="cd ../../.."
 alias .5="cd ../../../../"
 alias .6="cd ../../../../.."
 
-alias cep='chezmoi edit --apply'
+alias erc="nvim ~/.bashrc"
+alias src="source ~/.bashrc"
 
 # pnpm
 export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
@@ -158,7 +159,7 @@ export PATH="$PNPM_HOME:$PATH"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-bind -x '"\C-p": vim $(fzf);'
+bind -x '"\C-p": nvim $(fzf);'
 
 # -----------------------------------------------------------------------------
 
@@ -187,6 +188,14 @@ function gitgo() {
             fi
         fi
     fi
+}
+
+# -----------------------------------------------------------------------------
+
+function chgo() {
+    cd $(chezmoi source-path)
+    gitgo
+    cd ~
 }
 
 # -----------------------------------------------------------------------------
