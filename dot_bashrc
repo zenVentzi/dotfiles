@@ -118,12 +118,29 @@ fi
 
 # personal
 
+# export env variable from script without sourcing it (link below)
+# https://stackoverflow.com/questions/16618071/can-i-export-a-variable-to-the-environment-from-a-bash-script-without-sourcing-i
+# understand variable scope https://www.thegeekstuff.com/2010/05/bash-variables/
+
 # <Esc> in terminal to use vim keys
 set -o vi
 
 # Export editors
 export EDITOR="nvim"
 export VISUAL="nvim"
+
+# alias vs script vs function (link below)
+# https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function
+# run command shadowed by alias https://unix.stackexchange.com/questions/39291/run-a-command-that-is-shadowed-by-an-alias
+# aliases to avoid https://unix.stackexchange.com/a/634057/106455
+# Quickly jump to parent directores
+alias ..='cd ..'
+alias .3='cd ../..'
+alias .4="cd ../../.."
+alias .5="cd ../../../../"
+alias .6="cd ../../../../.."
+
+alias cep='chezmoi edit --apply'
 
 # pnpm
 export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
@@ -142,3 +159,85 @@ export PATH="$PNPM_HOME:$PATH"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 bind -x '"\C-p": vim $(fzf);'
+
+# -----------------------------------------------------------------------------
+
+# Adds, commits, and pushes to git with one command.
+function gitgo() {
+    # Are we in a directory under source control?
+    if [[ ! -d .git ]]; then
+        echo "Not a git repository."
+    else
+        echo "You are in ${PWD}"
+        # Are there any changes that need to be committed?
+        if git diff-index --quiet HEAD --; then
+            echo "Repository is up to date."
+        else                
+            # Prompt user for commit message
+            echo "Enter commit message:"
+            read _msg
+
+            # Was a commit message passed?
+            if [[ ! "$_msg" ]]; then
+                echo "You must include a commit message."
+            else
+                git add .
+                git commit -m "$_msg"
+                git push
+            fi
+        fi
+    fi
+}
+
+# -----------------------------------------------------------------------------
+
+# Auto-extract based on type
+function extract() {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)    tar xvjf $1     ;;
+          *.tar.gz)     tar xvzf $1     ;;
+          *.tar.xz)     tar xvfJ $1     ;;
+          *.bz2)        bunzip2 $1      ;;
+          *.rar)        rar x $1        ;;
+          *.gz)         gunzip $1       ;;
+          *.tar)        tar xvf $1      ;;
+          *.tbz2)       tar xvjf $1     ;;
+          *.tgz)        tar xvzf $1     ;;
+          *.zip)        unzip $1        ;;
+          *.Z)          uncompress $1   ;;
+          *.7z)         7z x $1         ;;
+          *)            echo "Unrecognized archive $1" ;;
+      esac
+  else
+      echo "$1 is not an extractable file"
+  fi
+}
+
+# -----------------------------------------------------------------------------
+
+# Set Reminder.
+# Allows you to set a reminder via the terminal.
+# A dialog box will show when the timer ends.
+# reminder() {
+#     echo "How many minutes from now do you want the reminder?"
+#     read _TIME
+#     echo "What should the reminder message say?"
+#     read _MSG
+#     echo "Reminder set!"
+#     sleep ${_TIME}m && zenity --info --text "${_MSG}" >/dev/null 2>&1
+# }
+
+
+# -----------------------------------------------------------------------------
+
+# Define file includes
+BASHINCS=(".bash_aliases" ".bash_exports" ".bash_functions" ".bash_linux" ".bash_options" ".bash_mac")
+
+# Load the file includes if they exist
+for file in ${BASHINCS[@]}; do
+	[ -f $BASEDIR/$file ] && source $BASEDIR/$file;
+done
+unset file
+
+# -----------------------------------------------------------------------------
