@@ -17,7 +17,7 @@ local config = {
     skip_prompts = false, -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
     auto_reload = false, -- automatically reload and sync packer after a successful update
-    auto_quit = false, -- automatically quit the current session after a successful update
+    auto_quit = true, -- automatically quit the current session after a successful update
     -- remotes = { -- easily add new remotes to track
     --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
     --   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
@@ -45,6 +45,11 @@ local config = {
   options = {
     opt = {
       relativenumber = true, -- sets vim.opt.relativenumber
+      foldmethod = "indent",
+      wrap = true,
+      breakindent = true,
+      formatoptions = "l",
+      lbr = true,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -168,7 +173,7 @@ local config = {
       -- mappings seen under group name "Buffer"
       ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
       ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
-      ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
+      -- ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
       ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
@@ -195,6 +200,29 @@ local config = {
       --     require("lsp_signature").setup()
       --   end,
       -- },
+      {
+        "hrsh7th/cmp-nvim-lua",
+        after = "nvim-cmp",
+        config = function()
+          astronvim.add_cmp_source {
+            name = "nvim_lua",
+            priority = 700, --[[ keyword_length = 2, max_item_count = 7 ]]
+          }
+        end,
+      },
+      {
+        "hrsh7th/cmp-emoji",
+        after = "nvim-cmp",
+        config = function()
+          astronvim.add_cmp_source {
+            name = "emoji",
+            priority = 700, --[[ keyword_length = 2, max_item_count = 7 ]]
+          }
+        end,
+      }, -- {
+      --   "hrsh7th/cmp-emoji",
+      --   after = "nvim-cmp",
+      -- },
 
       -- We also support a key value style plugin definition similar to NvChad:
       -- ["ray-x/lsp_signature.nvim"] = {
@@ -214,7 +242,10 @@ local config = {
       config.sources = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.prettier.with {
+          prefer_local = true,
+          disabled_filetypes = { "markdown" }, -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/0d68b5bffa/doc/BUILTIN_CONFIG.md
+        },
       }
       -- set up null-ls's on_attach function
       -- NOTE: You can remove this on attach function to disable format on save
@@ -263,10 +294,39 @@ local config = {
   -- true == 1000
   cmp = {
     source_priority = {
-      nvim_lsp = 1000,
-      luasnip = 750,
-      buffer = 500,
-      path = 250,
+      -- nvim_lsp = 1000,
+      nvim_lsp = false,
+      -- nvim_lua = 800,
+      luasnip = false,
+      -- luasnip = 750,
+      -- buffer = 500,
+      buffer = false,
+      path = false,
+      -- path = 250,
+    },
+    formatting = {
+      format = require("lspkind").cmp_format {
+        mode = "symbol", -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        before = function(entry, vim_item)
+          local menu_map = {
+            buffer = "[Buf]",
+            nvim_lsp = "[LSP]",
+            nvim_lua = "[API]",
+            path = "[Path]",
+            luasnip = "[Snip]",
+            rg = "[RG]",
+          }
+
+          vim_item.menu = menu_map[entry.source.name] or string.format("[%s]", entry.source.name)
+          vim_item.kind = vim.lsp.protocol.CompletionItemKind[vim_item.kind]
+
+          return vim_item
+        end,
+      },
     },
   },
 

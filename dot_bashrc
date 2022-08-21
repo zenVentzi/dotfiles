@@ -193,6 +193,7 @@ function gitgo() {
 # -----------------------------------------------------------------------------
 
 function chgo() {
+    chezmoi re-add 
     cd $(chezmoi source-path)
     gitgo
     cd ~
