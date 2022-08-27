@@ -126,8 +126,8 @@ fi
 set -o vi
 
 # Export editors
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="lvim"
+export VISUAL="lvim"
 
 # alias vs script vs function (link below)
 # https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function

@@ -38,6 +38,7 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
+-- possible errors bottom of answer https://stackoverflow.com/a/16360104/4132182
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -174,6 +175,11 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Additional Plugins
 lvim.plugins = {
+  { "ellisonleao/glow.nvim" },
+  { "iamcco/markdown-preview.nvim", run = "cd app && yarn install",
+    setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, },
+  { "tpope/vim-unimpaired" },
+  { "tpope/vim-surround" },
   { "folke/tokyonight.nvim" },
   {
     "folke/trouble.nvim",
@@ -186,10 +192,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
   pattern = { "*.json", "*.jsonc", "*.md" },
   callback = function()
     vim.opt.foldmethod = "indent"
+
     vim.opt.wrap = true
+    vim.opt.linebreak = true
     vim.opt.breakindent = true
-    vim.opt.formatoptions = "l"
-    vim.opt.lbr = true
+    vim.opt.formatoptions = vim.opt.formatoptions - { "t" }
   end
 })
 -- vim.api.nvim_create_autocmd("FileType", {
