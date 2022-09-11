@@ -8,6 +8,20 @@ an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
+-- temporary fix
+-- https://github.com/LunarVim/LunarVim/issues/2993#issuecomment-1239178800
+lvim.builtin.bufferline.options.indicator_icon = nil
+lvim.builtin.bufferline.options.indicator = { style = "icon", icon = "▎" }
+
+-- temporary fix
+-- https://github.com/neovim/neovim/issues/11330#issuecomment-1109800538
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+  callback = function()
+    local pid, WINCH = vim.fn.getpid(), vim.loop.constants.SIGWINCH
+    vim.defer_fn(function() vim.loop.kill(pid, WINCH) end, 20)
+  end
+})
+
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
