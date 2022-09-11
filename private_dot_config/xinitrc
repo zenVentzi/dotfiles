@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+# https://github.com/dylanaraps/pywal/wiki/Getting-Started#making-the-colorscheme-persist-on-reboot
+wal -R
+
+Xft.dpi: 1
