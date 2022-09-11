@@ -7,9 +7,13 @@
 # <Esc> in terminal to use vim keys
 set -o vi
 
+export TERMINAL="alacritty"
+
 # Export editors
 export EDITOR="lvim"
 export VISUAL="lvim"
+
+cat ~/.cache/wal/sequences
 
 # alias vs script vs function (link below)
 # https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function
@@ -30,7 +34,7 @@ export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 
 # Ctrl + r - search through bash history with fzf
 # Ctrl + p - edit a file in vim from fzf
