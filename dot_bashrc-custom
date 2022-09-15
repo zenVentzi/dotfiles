@@ -26,8 +26,8 @@ alias .4="cd ../../.."
 alias .5="cd ../../../../"
 alias .6="cd ../../../../.."
 
-alias erc="nvim ~/.bashrc"
 alias src="source ~/.bashrc"
+alias notes="cd ~/Documents/zen_vault_obsidian/notes; lvim ."
 
 # pnpm
 export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
