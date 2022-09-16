@@ -7,6 +7,9 @@
 # <Esc> in terminal to use vim keys
 set -o vi
 
+# Swap caps lock and escape
+setxkbmap -option caps:swapescape
+
 export TERMINAL="alacritty"
 
 # Export editors
