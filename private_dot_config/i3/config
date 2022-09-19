@@ -233,8 +233,8 @@ client.background       #FFFFFF
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
-exec --no-startup-id "setxkbmap -model pc105 -layout us,bg -variant ,phonetic -option grp:alt_shift_toggle"
 exec --no-startup-id nitrogen --restore
+exec_always --no-startup-id "setxkbmap -model pc105 -layout us,bg -variant ,phonetic -option grp:alt_shift_toggle"
 exec_always --no-startup-id "picom -f --config ~/.config/picom.conf"
 
 # screenshot, flameshot
