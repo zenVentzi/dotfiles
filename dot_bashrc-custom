@@ -11,7 +11,9 @@ set -o vi
 setxkbmap -option caps:swapescape
 
 export TERMINAL="alacritty"
-
+# export PS1='\[`[ $? = 0 ] && X=2 || X=1; tput setaf $X`\]\h\[`tput sgr0`\]:$PWD\n\$ '
+# export PS1='$PWD #'
+source ~/.config/.bash-powerline.sh
 # Export editors
 export EDITOR="lvim"
 export VISUAL="lvim"
@@ -30,7 +32,7 @@ alias .5="cd ../../../../"
 alias .6="cd ../../../../.."
 
 alias src="source ~/.bashrc"
-alias notes="cd ~/Documents/zen_vault_obsidian/notes; lvim ."
+alias notes="cd ~/Documents/zen-vault/notes; lvim ."
 
 # pnpm
 export PNPM_HOME="/home/zen_ventzi/.local/share/pnpm"
